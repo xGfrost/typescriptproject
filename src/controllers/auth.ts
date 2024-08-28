@@ -7,6 +7,7 @@ import { BadRequestsException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
 import { UnprocessanleEntity } from '../exceptions/validation';
 import { SignupSchema } from '../schemas/users';
+import { NotFoundException } from '../exceptions/not-found';
 
 export const signup = async (req: Request, res: Response, next: NextFunction) =>{
         SignupSchema.parse(req.body)
@@ -41,10 +42,10 @@ export const login = async (req: Request, res: Response) =>{
         }
     })
     if (!user) {
-        throw Error('user does not exists!')
+        throw new NotFoundException('User not found.', ErrorCode.USER_NOT_FOUND)
     }
     if (!compareSync(password, user.password)) {
-        throw Error('Incorreect password!')
+        throw new BadRequestsException('incorrect Password', ErrorCode.INCORRECT_PASSWORD)
     }
     const token = jwt.sign({
         userId: user.id
