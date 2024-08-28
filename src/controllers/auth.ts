@@ -5,9 +5,13 @@ import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../secrets';
 import { BadRequestsException } from '../exceptions/bad-requests';
 import { ErrorCode } from '../exceptions/root';
+import { UnprocessanleEntity } from '../exceptions/validation';
+import { SignupSchema } from '../schemas/users';
 
 export const signup = async (req: Request, res: Response, next: NextFunction) =>{
-    const {email, password, name} = req.body;
+    try {
+        SignupSchema.parse(req.body)
+        const {email, password, name} = req.body;
 
     let user = await prismaClient.user.findFirst({
         where:{
@@ -25,6 +29,10 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
         }
     })
     res.json(user)
+    } catch (error: any) {
+        next(new UnprocessanleEntity(error?.issues, 'Unprocessabe entity', ErrorCode.UNPROCESSABLE_ENTITY))
+    }
+    
     
 }
 
