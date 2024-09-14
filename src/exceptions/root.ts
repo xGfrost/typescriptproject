@@ -17,6 +17,7 @@ export class HttpException extends Error{
 }
 
 export enum ErrorCode{
+    PRODUCT_NOT_FOUND=3001,
     UNAUTHORIZED=4001,
     USER_NOT_FOUND=1001,
     USER_ALREADY_EXISTS = 1002,
