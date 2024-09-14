@@ -2,10 +2,11 @@ import { Request, Response } from "express";
 import { AddressSchema } from "../schemas/users";
 import { NotFoundException } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
-import { user } from '@prisma/client';
 import { prismaClient } from "..";
 
-export const addADdress = async (req:Request, res:Response) => {
+
+
+export const addADdress = async (req:any, res:Response) => {
     AddressSchema.parse(req.body)
     // let user: user;
     // try {
@@ -41,7 +42,7 @@ export const deleteADdress = async (req:Request, res:Response) => {
     }
 }
 
-export const listADdress = async (req:Request, res:Response) => {
+export const listADdress = async (req:any, res:Response) => {
     const address = await prismaClient.address.findMany({
         where:{
             userId: req.user.id
