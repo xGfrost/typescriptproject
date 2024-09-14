@@ -33,7 +33,8 @@ export const updateProduct = async (req:Request, res: Response) => {
 }
 
 export const deleteProduct = async (req:Request, res: Response) => {
-    const id = parseInt(req.params.id, 10);
+    try {
+        const id = parseInt(req.params.id, 10);
     const deleteid = await prismaClient.product.delete({
         where:{
             id
@@ -42,6 +43,9 @@ export const deleteProduct = async (req:Request, res: Response) => {
     res.json({
         message: "Delete Complete"
     })
+    } catch (error) {
+        throw new NotFoundException('Product not found', ErrorCode.PRODUCT_NOT_FOUND)
+    }
 }
 
 export const listProduct = async (req:Request, res: Response) => {
